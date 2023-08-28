@@ -1,0 +1,18 @@
+sudo apt update
+sudo apt install mysql-server
+backup.sh
+#!/bin/bash
+mysqldump -u your_username -p your_database > /path/to/backup.sql
+rsync_backup.sh
+#!/bin/bash
+rsync -avz /path/to/backup.sql user@secondary_server:/path/to/backup.sql
+crontab -e -u root
+* * * * * /path/to/backup.sh
+* * * * * sleep 10; /path/to/rsync_backup.sh
+* * * * * sleep 20; /path/to/rsync_backup.sh
+* * * * * sleep 30; /path/to/rsync_backup.sh
+* * * * * sleep 40; /path/to/rsync_backup.sh
+* * * * * sleep 50; /path/to/rsync_backup.sh
+restore.sh
+#!/bin/bash
+mysql -u your_username -p your_database < /path/to/backup.sql
